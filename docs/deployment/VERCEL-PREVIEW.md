@@ -9,7 +9,7 @@ The application uses one Fastify deployment to serve both the API and the built 
 - Install command: `npm ci`
 - Build command: `npm run build`
 - Node.js: 24 or later
-- `vercel.json` includes `apps/web/dist/**` in the Fastify function bundle.
+- Vercel detects the root `server.ts` Fastify entrypoint. The static app is built into `apps/web/dist` by the repository build command.
 - The Vercel `VERCEL_URL` system variable supplies the exact Preview origin for API mutation checks. `WEB_ORIGIN` is optional and should be unset unless an explicit origin is required.
 
 ## Preview environment variables
