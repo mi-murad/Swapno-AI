@@ -1,0 +1,30 @@
+{
+  "name": "swapno-ai",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "concurrently --kill-others -n api,web -c blue,magenta \"npm run dev --workspace @swapno/api\" \"npm run dev --workspace @swapno/web\"",
+    "build": "npm run build --workspace @swapno/api && npm run build --workspace @swapno/web",
+    "typecheck": "npm run typecheck --workspace @swapno/api && npm run typecheck --workspace @swapno/web",
+    "test": "npm run test --workspace @swapno/api && npm run test --workspace @swapno/web",
+    "test:security": "npm run test:security --workspace @swapno/api",
+    "test:integration": "node --test tests/integration/foundation.security.test.mjs",
+    "supabase:start": "supabase start",
+    "supabase:reset": "supabase db reset",
+    "supabase:test": "supabase test db"
+  },
+  "devDependencies": {
+    "@types/node": "26.6.6",
+    "concurrently": "10.0.7",
+    "supabase": "3.1.0",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2"
+  }
+}

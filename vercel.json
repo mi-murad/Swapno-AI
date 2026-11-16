@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "fastify",
+  "buildCommand": "npm run build",
+  "functions": {
+    "server.ts": {
+      "includeFiles": "apps/web/dist/**"
+    }
+  }
+}
