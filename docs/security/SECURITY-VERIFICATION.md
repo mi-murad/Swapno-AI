@@ -1,6 +1,6 @@
 # Security verification
 
-**Status:** Local foundation security verification passed on 16 November 2026. Hosted Supabase migrations and permission remediation are applied and catalog/advisor checks are clean. Hosted two-user authentication and Vercel Preview behavior remain to be verified.
+**Status:** Local foundation security verification passed on 16 November 2026. Hosted migrations, function permission checks, and a rollback-only database RLS simulation passed. Real hosted two-user Auth/API/Storage verification is still incomplete.
 
 ## Controls verified
 
@@ -36,19 +36,23 @@ Verified against local Supabase (127.0.0.1):
 - API and web typechecks: **PASS**.
 - API and web production builds: **PASS**.
 - Supabase security advisors: **PASS**, no issues found.
+- Hosted Supabase RLS simulation: **PASS**, using two distinct `authenticated` database roles and `request.jwt.claims`; workspace/profile/revision/membership/Storage metadata reads were isolated, cross-workspace updates affected zero rows, and forged workspace creation was rejected. The SQL ran inside a transaction; a follow-up query confirmed all fixture users, workspaces, and Storage metadata were rolled back. This did not create real Auth sessions or test private file bytes.
+- Hosted Supabase security advisor: **PASS**, no security findings. Performance advisor returned five informational unindexed-foreign-key findings; these are not security lints and remain a performance follow-up.
 - Supabase schema lint (`public`, `private`): **PASS**, no schema errors.
 - Local security advisors and schema lint: **PASS**, no issues or schema errors.
 - Local Vercel-mode HTTP smoke check: **PASS** for SPA root, Vite JavaScript asset, deep-link fallback, API health, and JSON 404 for an unknown API route.
 - Catalog inspection confirmed the definer functions are owned by `postgres`, use an empty `search_path`, and have the restricted execution ACLs shown above.
 - Auth JSON token non-disclosure and cookie flags were checked by unit and integration tests. Web source and built configuration contain no Supabase URL/key references; the browser talks to the API same-origin. The publishable key is kept server-side in this architecture and is not a secret credential.
 
-The hosted project now records both foundation migrations, has the four expected public tables, and retains the enabled `ensure_rls` trigger. Its Supabase security advisor returned no findings after the permission remediation. No hosted Auth users or integration-test data have been created yet.
+The hosted project records both foundation migrations, has the four expected public tables, and retains the enabled `ensure_rls` trigger. No real hosted Auth users or persistent integration-test data have been created.
+
+The Vercel Preview build is **READY** for commit `9a99bbd` on `preview/foundation-rollout`; project SSO protection is enabled. Unauthenticated requests to `/` and `/health` returned Vercel Authentication `302` responses. The authenticated fetch helper stalled, so application responses behind SSO were not verified. Preview-only encrypted variables are configured for `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY`; no service-role or AI-provider key is configured. The local build output scan found no Supabase URL/key markers.
 
 ## Limits and remaining requirements
 
 - Local two-user tests do not establish hosted Auth or RLS behavior. Hosted migrations, function ACLs, table presence, and advisor state were inspected, but real hosted user registration, workspace isolation, Storage, and persistence tests have not run.
-- The protected Vercel Preview has not deployed yet. Preview environment variables and browser flows still need verification.
+- The protected Vercel Preview has deployed, but protected application routes and browser flows still need verification using an authenticated Vercel request path.
 - Role verification establishes that clients cannot claim or mutate membership/roles. There is no invitation flow and no differentiated `admin` versus `member` capability model yet; those product semantics remain open.
 - No browser automation was run. Language switching is covered by frontend unit tests, not a manual browser acceptance check.
 - No live provider, AI, social OAuth, automation, subscription, or publishing integration was tested.
-- Hosted Supabase was changed only as approved: the two foundation migrations were applied, and the existing public helper's external execution grants were revoked while keeping its event trigger active. No Vercel project or repository setting has been changed, and no commit, push, or production deployment has occurred yet.
+- Hosted Supabase has the two approved foundation migrations; the existing public helper's external execution grants were revoked while keeping its event trigger active. A separate Vercel project is linked to `mi-murad/Swapno-AI`; the Preview branch was pushed and deployed. No production alias was promoted.

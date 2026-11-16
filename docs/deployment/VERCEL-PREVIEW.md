@@ -25,10 +25,10 @@ The publishable key is not an authorization secret; RLS and the signed-in user's
 
 ## Preview acceptance checks
 
-1. Confirm the deployment has Vercel Authentication / Preview protection enabled.
-2. Confirm `/` and a direct SPA deep link load the frontend, and `/health` returns the API health response.
-3. Register and sign in using the hosted Auth configuration; verify cookies are `HttpOnly`, `Secure`, and `SameSite=Strict`.
-4. Create separate test users/workspaces and repeat the database/API/Storage isolation checks against the hosted project. Clean up test accounts and rows afterward.
-5. Verify browser assets and API responses contain no credentials or auth tokens.
+1. **PASS:** Vercel Authentication / SSO Preview protection is enabled. Unauthenticated GET requests to `/` and `/health` returned `302` protection responses.
+2. **PENDING:** Verify `/`, a direct SPA deep link, and `/health` after authenticated access. The authenticated Vercel fetch helper did not return, and the local Vercel CLI is unavailable.
+3. **PENDING:** Register/sign in against hosted Auth and verify `HttpOnly`, `Secure`, and `SameSite=Strict` cookies.
+4. **PARTIAL:** A rollback-only hosted SQL simulation passed workspace and Storage metadata RLS checks under two authenticated database identities. Real hosted users, API isolation, persisted revisions, and private file-byte access still need end-to-end tests.
+5. **PARTIAL:** The local browser bundle contains no Supabase URL/key markers; deployed browser assets and API responses have not been inspected behind SSO.
 
 This setup is Preview-only. Do not promote or alias a production domain until the hosted two-user verification and browser checks pass.
