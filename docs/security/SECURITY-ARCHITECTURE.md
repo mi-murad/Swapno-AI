@@ -56,7 +56,13 @@ This document translates the approved product blueprint into controls to design,
 
 ## Approval gates and current state
 
-The initial local implementation uses Supabase Auth, PostgreSQL RLS, and private Storage policies. Local migrations and two-user tests are authored but not yet executed because this Windows environment lacks a Docker-compatible runtime/PostgreSQL. No cloud project, AI provider, OAuth app, social account, deployment, or production secret was connected. Security controls beyond the initial authentication/workspace/Business Brain scope remain future work.
+The current Preview foundation is connected to the hosted Supabase project and a protected Vercel Preview deployment. The deployed foundation schema contains workspaces, memberships, Business Brain profiles/revisions, and a private `business-sources` bucket. The hosted Supabase project currently has zero Auth users; no real hosted two-user workflow has been verified.
+
+The Content Drafts/Approvals migration exists on the GitHub feature branch and has passed the isolated database CI suite on its earlier verified commit, but it has **not** been applied to hosted Supabase. Until that migration is explicitly reviewed and applied to the intended Preview database, the Content module must be treated as not hosted-ready.
+
+The Vercel project is configured for the Fastify framework, uses Node.js 26.x, and has SSO protection enabled for Preview deployments. Earlier Preview deployments repeatedly failed at runtime with initialization timeouts and SIGKILL despite successful builds. A port/entrypoint correction is now on the feature branch; its build is READY, but live HTTP verification is still pending. Do not equate deployment readiness with application health.
+
+No AI provider, social OAuth application, publishing integration, advertising account, or production release has been enabled. Production deployment and production data remain out of scope until the required security, privacy, recovery, and user-acceptance checks are approved. Security controls beyond the implemented authentication, workspace, Business Brain, and private-source foundation remain future work.
 
 ## First-party references
 
