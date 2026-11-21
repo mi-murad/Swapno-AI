@@ -41,3 +41,9 @@ jobs:
         run: npm run test:security
       - name: Production build
         run: npm run build
+      - name: Start isolated Supabase test stack
+        run: npm run supabase:start
+      - name: Apply migrations to the isolated database
+        run: npm run supabase:reset
+      - name: Run database RLS and migration tests
+        run: npm run supabase:test
