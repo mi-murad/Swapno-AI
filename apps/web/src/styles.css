@@ -239,3 +239,23 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-
   .history-list, .empty-history { margin-left: 31px; }
   .global-message-wrap { padding-inline: 12px; }
 }
+
+
+.content-drafts-page { width: min(100%, 1180px); margin: 0 auto; padding: 42px clamp(20px, 4vw, 56px) 72px; }
+.content-drafts-page .page-heading { margin-bottom: 24px; }
+.drafts-layout { display: grid; grid-template-columns: minmax(210px, 280px) minmax(0, 1fr); gap: 20px; align-items: start; }
+.draft-list { display: flex; flex-direction: column; gap: 7px; padding: 10px; border: 1px solid #e3e9e4; border-radius: 12px; background: white; }
+.draft-list-item { display: flex; flex-direction: column; gap: 5px; padding: 12px; border: 1px solid transparent; border-radius: 8px; color: #34443a; background: transparent; text-align: left; }
+.draft-list-item.selected { border-color: #cfe1d4; background: #eff7f1; }
+.draft-list-item strong { overflow-wrap: anywhere; font-size: 12px; }
+.draft-list-item span, .draft-revision span { color: #87928b; font-size: 10px; }
+.draft-editor { min-width: 0; }
+.draft-editor .brain-form { margin-bottom: 18px; }
+.draft-revision { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; padding: 12px 0; border-top: 1px solid #edf0ed; }
+.draft-revision strong { color: #34443a; font-size: 11px; }
+.draft-revision p { flex-basis: 100%; margin: 0; color: #758279; font-size: 11px; }
+@media (max-width: 760px) {
+  .content-drafts-page { padding: 28px 16px 48px; }
+  .drafts-layout { grid-template-columns: minmax(0, 1fr); }
+  .draft-list { max-height: 210px; overflow-y: auto; }
+}
