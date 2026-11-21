@@ -3,13 +3,12 @@ import { resolve } from "node:path";
 import { readConfig } from "./config.js";
 
 describe("readConfig", () => {
-  it("uses the Vercel deployment origin when no explicit allowlist is configured", () => {
+  it("uses Vercel's listener port and deployment origin when PORT is absent", () => {
     const config = readConfig({
       SUPABASE_URL: "https://project.supabase.co",
       SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test_only",
       VERCEL: "1",
       VERCEL_URL: "swapno-ai-preview.example.vercel.app",
-      PORT: "3000",
       NODE_ENV: "preview",
     } as NodeJS.ProcessEnv);
 
@@ -18,6 +17,16 @@ describe("readConfig", () => {
     expect(config.host).toBe("0.0.0.0");
     expect(config.isProduction).toBe(true);
     expect(config.webBuildDir).toBe(resolve(process.cwd(), "apps/web/dist"));
+  });
+
+  it("honors an explicit platform PORT", () => {
+    const config = readConfig({
+      SUPABASE_URL: "https://project.supabase.co",
+      SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test_only",
+      VERCEL: "1",
+      PORT: "4317",
+    } as NodeJS.ProcessEnv);
+    expect(config.port).toBe(4317);
   });
 
   it("accepts a comma-separated exact origin allowlist and normalizes duplicates", () => {
@@ -57,6 +66,7 @@ describe("readConfig", () => {
       WEB_ORIGIN: "http://127.0.0.1:5174",
     } as NodeJS.ProcessEnv);
 
+    expect(local.port).toBe(3010);
     expect(local.webOrigins).toEqual(["http://127.0.0.1:5173"]);
     expect(explicit.port).toBe(3001);
     expect(explicit.host).toBe("127.0.0.1");

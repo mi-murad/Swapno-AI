@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - preview/foundation-rollout
+      - fix/**
   push:
     branches:
       - main
@@ -29,7 +30,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 24
+          node-version: 26
           cache: npm
       - name: Install dependencies
         run: npm ci
@@ -41,3 +42,9 @@ jobs:
         run: npm run test:security
       - name: Production build
         run: npm run build
+      - name: Start isolated Supabase test stack
+        run: npm run supabase:start
+      - name: Apply migrations to the isolated database
+        run: npm run supabase:reset
+      - name: Run database RLS and migration tests
+        run: npm run supabase:test

@@ -95,6 +95,26 @@ describe("API authentication and request boundaries", () => {
     expect(response.body).not.toContain("secret-refresh-token");
   });
 
+  it("requires authentication to read workspace content drafts", async () => {
+    const app = await createServer();
+    const response = await app.inject({
+      method: "GET",
+      url: "/api/workspaces/a0000000-0000-4000-8000-000000000001/content-drafts",
+    });
+    expect(response.statusCode).toBe(401);
+  });
+
+  it("rejects cross-origin content draft approval attempts", async () => {
+    const app = await createServer();
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/workspaces/a0000000-0000-4000-8000-000000000001/content-drafts/b0000000-0000-4000-8000-000000000001/approvals",
+      headers: { origin: "https://attacker.example" },
+      payload: { revision: 1, decision: "approved", note: "" },
+    });
+    expect(response.statusCode).toBe(403);
+  });
+
   it("requires a verified session to list workspaces", async () => {
     const app = await createServer();
     const response = await app.inject({ method: "GET", url: "/api/workspaces" });

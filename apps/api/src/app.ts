@@ -10,6 +10,7 @@ import type { AppDependencies } from "./modules/auth/types.js";
 import { registerAuthRoutes } from "./modules/auth/routes.js";
 import { registerWorkspaceRoutes } from "./modules/workspaces/routes.js";
 import { registerBusinessBrainRoutes } from "./modules/business-brain/routes.js";
+import { registerContentDraftRoutes } from "./modules/content-drafts/routes.js";
 
 export async function buildApp(
   config: AppConfig,
@@ -45,6 +46,7 @@ export async function buildApp(
   await registerAuthRoutes(app, dependencies, config);
   await registerWorkspaceRoutes(app, dependencies, config);
   await registerBusinessBrainRoutes(app, dependencies, config);
+  await registerContentDraftRoutes(app, dependencies, config);
 
   if (config.webBuildDir) {
     const webRoot = resolve(config.webBuildDir);
