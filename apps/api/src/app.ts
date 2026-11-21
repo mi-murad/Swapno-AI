@@ -35,7 +35,8 @@ export async function buildApp(
 
   app.addHook("onRequest", async (request, reply) => {
     if (!request.url.startsWith("/api/") || ["GET", "HEAD", "OPTIONS"].includes(request.method)) return;
-    if (request.headers.origin !== config.webOrigin) {
+    const requestOrigin = request.headers.origin;
+    if (!requestOrigin || !config.webOrigins.includes(requestOrigin)) {
       return reply.code(403).send({ error: "Request origin is not allowed." });
     }
   });
