@@ -58,9 +58,12 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     throw new Error("API_PORT must be a valid TCP port.");
   }
 
-  const configuredOrigins = env.WEB_ORIGINS?.trim()
-    || env.WEB_ORIGIN?.trim()
-    || (env.VERCEL_URL ? `https://${env.VERCEL_URL}` : "http://127.0.0.1:5173");
+  const deploymentOrigin = env.VERCEL_URL ? `https://${env.VERCEL_URL}` : "";
+  const configuredOrigins = [
+    env.WEB_ORIGINS?.trim(),
+    env.WEB_ORIGIN?.trim(),
+    deploymentOrigin,
+  ].filter(Boolean).join(",") || "http://127.0.0.1:5173";
 
   return {
     supabaseUrl: parsedUrl.toString().replace(/\/$/, ""),
