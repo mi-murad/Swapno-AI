@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useId, useMemo, useState, type FormEvent } from "react";
 import { translate, type Language, type StringKey } from "./i18n/strings";
 import { apiRequest, toErrorMessage } from "./lib/api";
+import { ContentDrafts } from "./features/content-drafts/ContentDrafts";
 
 interface User {
   id: string;
@@ -132,7 +133,7 @@ export function App() {
   const [history, setHistory] = useState<Revision[]>([]);
   const [form, setForm] = useState<BrainForm>({ ...EMPTY_FORM });
   const [authMode, setAuthMode] = useState<"login" | "signup">("login");
-  const [activeView, setActiveView] = useState<"overview" | "brain">("overview");
+  const [activeView, setActiveView] = useState<"overview" | "brain" | "drafts">("overview");
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -390,6 +391,7 @@ export function App() {
         <nav className="side-nav" aria-label={t("sidebarTitle")}>
           <button className={activeView === "overview" ? "active" : ""} type="button" onClick={() => setActiveView("overview")}><span className="nav-symbol" aria-hidden="true">⌂</span>{t("overview")}</button>
           <button className={activeView === "brain" ? "active" : ""} type="button" onClick={() => setActiveView("brain")} disabled={!activeWorkspace}><span className="nav-symbol brain-symbol" aria-hidden="true">◉</span>{t("brain")}</button>
+          <button className={activeView === "drafts" ? "active" : ""} type="button" onClick={() => setActiveView("drafts")} disabled={!activeWorkspace}><span className="nav-symbol" aria-hidden="true">✎</span>{language === "bn" ? "কনটেন্ট" : "Content"}</button>
         </nav>
         <div className="sidebar-bottom">
           <div className="sidebar-language">{renderLanguagePicker(true)}</div>
@@ -425,6 +427,8 @@ export function App() {
               <button className="button button-secondary" type="button" onClick={() => setActiveView("brain")}>{profile ? t("brain") : t("startBrain")}<span aria-hidden="true"> →</span></button>
             </div>
           </section>
+        ) : activeView === "drafts" && activeWorkspace ? (
+          <ContentDrafts workspaceId={activeWorkspace.id} language={language} />
         ) : activeWorkspace ? (
           <section className="brain-page content-wrap">
             <div className="page-heading">
