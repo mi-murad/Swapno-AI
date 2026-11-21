@@ -71,8 +71,9 @@ export async function registerContentDraftRoutes(
     if (!params.success) return reply.code(400).send({ error: "Invalid workspace." });
     if (!parsed.success) return reply.code(400).send({ error: "Check the content draft fields and try again." });
 
+    const { expectedRevision: _expectedRevision, ...fields } = parsed.data;
     const { data, error } = await actor.client.from("content_drafts")
-      .insert({ workspace_id: params.data.workspaceId, ...parsed.data })
+      .insert({ workspace_id: params.data.workspaceId, ...fields })
       .select("*")
       .single();
     if (error) return reply.code(error.code === "42501" ? 404 : 500)
