@@ -30,6 +30,21 @@ describe("readConfig", () => {
     expect(config.webOrigins).toEqual(["https://preview.example.com", "https://alias.example.com"]);
   });
 
+  it("combines explicit stable aliases with the current Vercel deployment hostname", () => {
+    const config = readConfig({
+      SUPABASE_URL: "https://project.supabase.co",
+      SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test_only",
+      VERCEL: "1",
+      VERCEL_URL: "swapno-ai-new-deployment.example.vercel.app",
+      WEB_ORIGINS: "https://swapno-ai-preview.example.com",
+    } as NodeJS.ProcessEnv);
+
+    expect(config.webOrigins).toEqual([
+      "https://swapno-ai-preview.example.com",
+      "https://swapno-ai-new-deployment.example.vercel.app",
+    ]);
+  });
+
   it("keeps local defaults and supports the legacy single-origin setting", () => {
     const local = readConfig({
       SUPABASE_URL: "http://127.0.0.1:54321",
