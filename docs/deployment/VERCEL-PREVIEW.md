@@ -8,9 +8,11 @@ The application uses one Fastify deployment to serve both the API and the built 
 - Root directory: repository root
 - Install command: `npm ci`
 - Build command: `npm run build`
-- Node.js: 24 or later
-- Vercel detects the root `server.ts` Fastify entrypoint. The static app is built into `apps/web/dist` by the repository build command.
-- The Vercel `VERCEL_URL` system variable supplies the exact Preview origin for API mutation checks. `WEB_ORIGIN` is optional and should be unset unless an explicit origin is required.
+- Node.js: pinned to `26.x` to match the Vercel project and CI.
+- Canonical entrypoint: root `server.ts`. Do not add a second Fastify entrypoint under `src/`.
+- The root server uses the Vercel-provided `PORT`, falling back to `3000` on Vercel. Local API development continues to use `3001`.
+- The static app is built into `apps/web/dist` by the repository build command.
+- The Vercel `VERCEL_URL` system variable supplies the exact Preview origin for API mutation checks.
 
 ## Preview environment variables
 
@@ -26,7 +28,7 @@ The publishable key is not an authorization secret; RLS and the signed-in user's
 ## Preview acceptance checks
 
 1. **PASS:** Vercel Authentication / SSO Preview protection is enabled. Unauthenticated GET requests to `/` and `/health` returned `302` protection responses.
-2. **PENDING:** Verify `/`, a direct SPA deep link, and `/health` after authenticated access. The authenticated Vercel fetch helper did not return, and the local Vercel CLI is unavailable.
+2. **PENDING:** Verify `/`, a direct SPA deep link, and `/health` after authenticated access.
 3. **PENDING:** Register/sign in against hosted Auth and verify `HttpOnly`, `Secure`, and `SameSite=Strict` cookies.
 4. **PARTIAL:** A rollback-only hosted SQL simulation passed workspace and Storage metadata RLS checks under two authenticated database identities. Real hosted users, API isolation, persisted revisions, and private file-byte access still need end-to-end tests.
 5. **PARTIAL:** The local browser bundle contains no Supabase URL/key markers; deployed browser assets and API responses have not been inspected behind SSO.
