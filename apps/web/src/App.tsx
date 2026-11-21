@@ -226,7 +226,8 @@ export function App() {
         await loadAccount();
       }
     } catch (error) {
-      setErrorMessage(isSignup ? t("signupError") : t("loginError"));
+      const message = toErrorMessage(error);
+      setErrorMessage(message || (isSignup ? t("signupError") : t("loginError")));
     } finally {
       setBusy(false);
     }

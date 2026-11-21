@@ -8,7 +8,7 @@ const config: AppConfig = {
   supabasePublishableKey: "sb_publishable_test_only",
   port: 3001,
   host: "127.0.0.1",
-  webOrigin: "http://127.0.0.1:5173",
+  webOrigins: ["http://127.0.0.1:5173", "https://preview-alias.example.vercel.app"],
   isProduction: false,
 };
 
@@ -80,7 +80,7 @@ describe("API authentication and request boundaries", () => {
     const response = await app.inject({
       method: "POST",
       url: "/api/auth/login",
-      headers: { origin: config.webOrigin },
+      headers: { origin: config.webOrigins[0] },
       payload: { email: "owner@example.test", password: "a-long-test-password" },
     });
 
@@ -106,14 +106,14 @@ describe("API authentication and request boundaries", () => {
     const login = await app.inject({
       method: "POST",
       url: "/api/auth/login",
-      headers: { origin: config.webOrigin },
+      headers: { origin: config.webOrigins[0] },
       payload: { email: "owner@example.test", password: "a-long-test-password" },
     });
     const cookie = (login.headers["set-cookie"] as string[]).map((value) => value.split(";", 1)[0]).join("; ");
     const response = await app.inject({
       method: "POST",
       url: "/api/workspaces",
-      headers: { origin: config.webOrigin, cookie },
+      headers: { origin: config.webOrigins[0], cookie },
       payload: { name: "A test workspace" },
     });
 
@@ -125,6 +125,27 @@ describe("API authentication and request boundaries", () => {
         created_at: new Date(0).toISOString(),
       },
     });
+  });
+
+  it("accepts an explicitly allowlisted preview alias", async () => {
+    const app = await createServer();
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/auth/login",
+      headers: { origin: "https://preview-alias.example.vercel.app" },
+      payload: { email: "owner@example.test", password: "a-long-test-password" },
+    });
+    expect(response.statusCode).toBe(200);
+  });
+
+  it("rejects a mutation without an Origin header", async () => {
+    const app = await createServer();
+    const response = await app.inject({
+      method: "POST",
+      url: "/api/workspaces",
+      payload: { name: "No origin" },
+    });
+    expect(response.statusCode).toBe(403);
   });
 
   it("rejects a cross-origin mutation before reading auth or data", async () => {
@@ -144,7 +165,7 @@ describe("API authentication and request boundaries", () => {
     const response = await app.inject({
       method: "POST",
       url: "/api/auth/login",
-      headers: { origin: config.webOrigin },
+      headers: { origin: config.webOrigins[0] },
       payload: { email: "owner@example.test", password: "a-long-test-password" },
     });
     const cookies = response.headers["set-cookie"] as string[];
