@@ -53,9 +53,12 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   }
 
   const isVercel = env.VERCEL === "1";
-  const portValue = Number(env.PORT ?? env.API_PORT ?? "3001");
+  // Vercel's Fastify adapter expects the listener on its assigned PORT (3000
+  // when PORT is absent). Keep the standalone local API default at 3001.
+  const defaultPort = isVercel ? "3000" : "3001";
+  const portValue = Number(env.PORT ?? env.API_PORT ?? defaultPort);
   if (!Number.isInteger(portValue) || portValue < 1 || portValue > 65535) {
-    throw new Error("API_PORT must be a valid TCP port.");
+    throw new Error("PORT/API_PORT must be a valid TCP port.");
   }
 
   const deploymentOrigin = env.VERCEL_URL ? `https://${env.VERCEL_URL}` : "";
