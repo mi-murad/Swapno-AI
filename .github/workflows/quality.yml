@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - preview/foundation-rollout
+      - fix/**
   push:
     branches:
       - main
