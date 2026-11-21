@@ -32,7 +32,7 @@ interface Props { workspaceId: string; language: Language; }
 const copy = {
   en: {
     title: "Content drafts", intro: "Create, revise and approve content. Every approval is tied to one exact revision.",
-    newDraft: "New draft", draftTitle: "Draft title", platform: "Platform", type: "Content type",
+    newDraft: "New draft", draftTitle: "Draft title", platform: "Platform", type: "Content type", status: "Status",
     language: "Content language", body: "Content", save: "Save draft", create: "Create draft",
     approve: "Approve this revision", history: "Revision history", noDrafts: "No content drafts yet.",
     select: "Select a draft", revision: "Revision", approved: "Approved", changes: "Changes requested",
@@ -44,7 +44,7 @@ const copy = {
   },
   bn: {
     title: "কনটেন্ট ড্রাফট", intro: "কনটেন্ট তৈরি, সংশোধন ও অনুমোদন করুন। প্রতিটি অনুমোদন নির্দিষ্ট সংস্করণের সঙ্গে যুক্ত থাকে।",
-    newDraft: "নতুন ড্রাফট", draftTitle: "ড্রাফটের শিরোনাম", platform: "প্ল্যাটফর্ম", type: "কনটেন্টের ধরন",
+    newDraft: "নতুন ড্রাফট", draftTitle: "ড্রাফটের শিরোনাম", platform: "প্ল্যাটফর্ম", type: "কনটেন্টের ধরন", status: "অবস্থা",
     language: "কনটেন্টের ভাষা", body: "কনটেন্ট", save: "ড্রাফট সংরক্ষণ", create: "ড্রাফট তৈরি",
     approve: "এই সংস্করণ অনুমোদন করুন", history: "সংস্করণের ইতিহাস", noDrafts: "এখনও কোনো কনটেন্ট ড্রাফট নেই।",
     select: "একটি ড্রাফট বেছে নিন", revision: "সংস্করণ", approved: "অনুমোদিত", changes: "সংশোধন প্রয়োজন",
