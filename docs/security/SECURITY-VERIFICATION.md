@@ -1,6 +1,6 @@
 # Security verification
 
-**Status:** Local foundation security verification passed on 16 November 2026. Hosted migrations, function permission checks, and a rollback-only database RLS simulation passed. Real hosted two-user Auth/API/Storage verification is still incomplete.
+**Status:** Local foundation security verification passed on 16 November 2026. Hosted foundation migrations, function permission checks, and a rollback-only database RLS simulation passed. Real hosted two-user Auth/API/Storage verification is still incomplete. The latest feature-branch CI run is rechecking the full migration suite on Node.js 26.
 
 ## Controls verified
 
@@ -51,7 +51,7 @@ The Vercel Preview build is **READY** for commit `9a99bbd` on `preview/foundatio
 ## Limits and remaining requirements
 
 - Local two-user tests do not establish hosted Auth or RLS behavior. Hosted migrations, function ACLs, table presence, and advisor state were inspected, but real hosted user registration, workspace isolation, Storage, and persistence tests have not run.
-- The protected Vercel Preview has deployed, but protected application routes and browser flows still need verification using an authenticated Vercel request path.
+- The protected Vercel Preview has deployed, but protected application routes and browser flows still need verification using an authenticated Vercel request path. The latest deployment is build-ready only; do not mark it runtime-healthy until `/`, `/health`, and an API request are verified.
 - Role verification establishes that clients cannot claim or mutate membership/roles. There is no invitation flow and no differentiated `admin` versus `member` capability model yet; those product semantics remain open.
 - No browser automation was run. Language switching is covered by frontend unit tests, not a manual browser acceptance check.
 - No live provider, AI, social OAuth, automation, subscription, or publishing integration was tested.
