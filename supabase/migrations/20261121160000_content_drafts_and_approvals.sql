@@ -121,6 +121,7 @@ create policy "Members can approve only the current draft revision"
       where draft.id = content_approvals.draft_id
         and draft.workspace_id = content_approvals.workspace_id
         and draft.revision = content_approvals.revision
+        and draft.status = 'draft'
     )
   );
 
