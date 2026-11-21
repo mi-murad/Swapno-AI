@@ -7,7 +7,8 @@ Swapno AI is a bilingual business workspace foundation for Bangladesh-first busi
 - React + Vite + TypeScript frontend and Fastify + TypeScript API, backed by Supabase Auth, PostgreSQL, and private Storage.
 - English and Bangla interface, workspace creation, and Business Brain create/edit/history flows are implemented.
 - Local two-user API, database, session, persistence, and Storage verification passed. See [Security verification](docs/security/SECURITY-VERIFICATION.md) for evidence and hosted-environment limits.
-- The hosted Supabase foundation migrations are applied. A protected Vercel Preview is being prepared; production aliases have not been promoted.
+- The hosted Supabase foundation migrations are applied. The protected Vercel Preview is build-ready, but its authenticated runtime/browser acceptance is still pending; production aliases have not been promoted.
+- Content drafts and revision-specific approvals are implemented on the feature branch. Their migration is not yet applied to hosted Supabase, so that module is not hosted-ready.
 - AI providers, subscriptions, social OAuth, publishing, and automations are not connected.
 
 ## Local development
