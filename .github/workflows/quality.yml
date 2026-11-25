@@ -6,11 +6,13 @@ on:
       - main
       - preview/foundation-rollout
       - fix/**
+      - feature/**
   push:
     branches:
       - main
       - preview/foundation-rollout
       - fix/**
+      - feature/**
 
 permissions:
   contents: read
