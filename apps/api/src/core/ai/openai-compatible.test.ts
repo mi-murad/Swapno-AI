@@ -12,8 +12,10 @@ describe("OpenAI-compatible AI provider", () => {
     const provider = createOpenAICompatibleProvider(config, fetcher as typeof fetch);
     const result = await provider.complete({ messages: [{ role: "user", content: "Hi" }] });
     expect(fetcher).toHaveBeenCalledOnce();
-    expect(String(fetcher.mock.calls[0][0])).toBe("http://127.0.0.1:20128/v1/chat/completions");
-    expect(JSON.parse(String(fetcher.mock.calls[0][1]?.body))).toMatchObject({ model: "test/model" });
+    const firstCall = fetcher.mock.calls[0];
+    expect(firstCall).toBeDefined();
+    expect(String(firstCall?.[0])).toBe("http://127.0.0.1:20128/v1/chat/completions");
+    expect(JSON.parse(String(firstCall?.[1]?.body))).toMatchObject({ model: "test/model" });
     expect(result).toMatchObject({ provider: "openai-compatible", content: "Hello", usage: { totalTokens: 6 } });
   });
 
