@@ -2,19 +2,23 @@
 
 ## Requirements
 
-- Node.js 24 or newer and npm.
+- Node.js 26 (match the repository CI/runtime), npm.
 - Docker Desktop, Podman, or another Docker-compatible runtime supported by Supabase CLI on Windows.
 - Ports 5173, 3001, and the default local Supabase ports available.
 
 ## Start the application
 
-1. Run `npm install` in the repository root.
+1. Run `npm ci` in the repository root.
 2. Run `npm run supabase:start`. The first start downloads Supabase container images and can take several minutes.
 3. Copy `.env.example` to `.env`. Set `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` to the local values printed by the CLI. Use only the local publishable key here. The API uses that same public key with the signed-in user's access token; it has no service-role key.
 4. Run `npm run dev` in the repository root.
 5. Browse to `http://127.0.0.1:5173`.
 
 To recreate the local database and apply migrations, run `npm run supabase:reset`. To execute the database policy suite, run `npm run supabase:test`.
+
+## Optional local 9Router AI gateway
+
+See [AI gateway setup](AI-GATEWAY.md). Configure optional `AI_BASE_URL`, `AI_API_KEY`, and `AI_DEFAULT_MODEL` values in the ignored root `.env` file. The first adapter implementation is server-side only and does not make provider calls unless application code explicitly invokes it.
 
 ## Two-user integration verification
 
@@ -30,9 +34,9 @@ The checked-in local Supabase configuration disables email confirmation so local
 |---|---|
 | `npm run dev` | Start Fastify API and Vite web app |
 | `npm run typecheck` | Type check both workspaces |
-| `npm run test` | Run API and frontend unit/component tests |
+| `npm run test` | Run API and web unit/component tests |
 | `npm run test:security` | Run API cookie, auth-boundary, and origin checks |
-| `npm run build` | Build API and static web app |
+| `npm run build` | Build production assets for both workspaces |
 | `npm run supabase:start` | Start local Supabase containers |
 | `npm run supabase:reset` | Reset database and reapply migrations |
 | `npm run supabase:test` | Run SQL RLS and Storage tests |
