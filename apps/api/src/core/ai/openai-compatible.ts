@@ -14,7 +14,7 @@ function normalizeBaseUrl(value: string): string {
   if (!["http:", "https:"].includes(parsed.protocol) || parsed.username || parsed.password || parsed.search || parsed.hash) {
     throw new Error("AI_BASE_URL must be an HTTP(S) base URL without credentials, query, or fragment.");
   }
-  return parsed.toString().replace(/\\/+$/, "");
+  return parsed.toString().replace(/\/+$/, "");
 }
 
 export function createOpenAICompatibleProvider(
