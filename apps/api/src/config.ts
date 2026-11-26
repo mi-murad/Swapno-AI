@@ -52,9 +52,9 @@ export function readConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     throw new Error("SUPABASE_URL must use http or https.");
   }
 
-  const isVercel = env.VERCEL === "1";
-  // Vercel's Fastify adapter expects the listener on its assigned PORT (3000
-  // when PORT is absent). Keep the standalone local API default at 3001.
+  // Vercel's runtime metadata is authoritative even when the legacy VERCEL
+  // flag is absent in a particular function execution context.
+  const isVercel = env.VERCEL === "1" || Boolean(env.VERCEL_URL || env.VERCEL_ENV);
   const defaultPort = isVercel ? "3000" : "3001";
   const portValue = Number(env.PORT ?? env.API_PORT ?? defaultPort);
   if (!Number.isInteger(portValue) || portValue < 1 || portValue > 65535) {
