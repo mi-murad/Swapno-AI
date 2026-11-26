@@ -19,6 +19,22 @@ describe("readConfig", () => {
     expect(config.webBuildDir).toBe(resolve(process.cwd(), "apps/web/dist"));
   });
 
+  it("recognizes Vercel from deployment metadata when VERCEL is absent", () => {
+    const config = readConfig({
+      SUPABASE_URL: "https://project.supabase.co",
+      SUPABASE_PUBLISHABLE_KEY: "sb_publishable_test_only",
+      VERCEL_URL: "swapno-ai-preview.example.vercel.app",
+      VERCEL_ENV: "preview",
+      PORT: "3000",
+    } as NodeJS.ProcessEnv);
+
+    expect(config.port).toBe(3000);
+    expect(config.host).toBe("0.0.0.0");
+    expect(config.isProduction).toBe(true);
+    expect(config.webOrigins).toEqual(["https://swapno-ai-preview.example.vercel.app"]);
+    expect(config.webBuildDir).toBe(resolve(process.cwd(), "apps/web/dist"));
+  });
+
   it("honors an explicit platform PORT", () => {
     const config = readConfig({
       SUPABASE_URL: "https://project.supabase.co",
