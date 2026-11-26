@@ -10,7 +10,7 @@ The application uses one Fastify deployment to serve both the API and the built 
 - Build command: `npm run build`
 - Node.js: pinned to `26.x` to match the Vercel project and CI.
 - Canonical entrypoint: root `server.ts`. Do not add a second Fastify entrypoint under `src/`.
-- The root server uses the Vercel-provided `PORT`, falling back to `3000` on Vercel. Local API development continues to use `3001`.
+- The root `server.ts` exports the initialized Fastify app for Vercel's serverless request lifecycle; it does not open a long-lived listener inside the function. Local API development continues to use `apps/api/src/server.ts` on port `3001`.
 - The static app is built into `apps/web/dist` by the repository build command.
 - The Vercel `VERCEL_URL` system variable supplies the exact Preview origin for API mutation checks.
 
